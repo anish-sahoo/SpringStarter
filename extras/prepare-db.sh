@@ -2,25 +2,25 @@
 
 # This creates a docker container with postgres, creates a table and adds some mock data
 
-docker pull postgres
-docker run -d \
-  --name postgres-db \
-  -e POSTGRES_USER=testusername \
-  -e POSTGRES_PASSWORD=testpassword \
-  -e POSTGRES_DB=studentdb \
-  -p 5432:5432 \
-  postgres
-
-sleep 5
-
-echo "Docker container setup complete. Now setting up database."
-
 DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=testusername
 DB_PASSWORD=testpassword
 DB_NAME=studentdb
 POSTGRES_CONTAINER_NAME=postgres-db
+
+docker pull postgres
+docker run -d \
+  --name $POSTGRES_CONTAINER_NAME \
+  -e POSTGRES_USER=$DB_USERNAME \
+  -e POSTGRES_PASSWORD=$DB_PASSWORD \
+  -e POSTGRES_DB=$DB_NAME \
+  -p $DB_PORT:5432 \
+  postgres
+
+sleep 5
+
+echo "Docker container setup complete. Now setting up database."
 
 docker exec -i $POSTGRES_CONTAINER_NAME psql -U $DB_USERNAME -d $DB_NAME <<-EOSQL
 -- Create the students table if not exists
